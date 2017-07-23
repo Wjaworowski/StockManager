@@ -12,7 +12,7 @@
     public static class DalInstaller
     {
         /// <summary>
-        /// Installers for DAL.
+        /// Registers DAL types.
         /// </summary>
         /// <param name="container">The IoC container.</param>
         public static void Install(IUnityContainer container)

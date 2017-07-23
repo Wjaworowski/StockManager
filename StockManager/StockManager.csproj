@@ -229,6 +229,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Automapper\AutoMapperProfile.cs" />
+    <Compile Include="Installers\AutomapperInstaller.cs" />
     <Compile Include="Installers\Bootstrapper.cs" />
     <Compile Include="Installers\DalInstaller.cs" />
     <Compile Include="MainWindow.xaml.cs">

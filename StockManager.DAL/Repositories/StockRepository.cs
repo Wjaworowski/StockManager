@@ -15,6 +15,10 @@
     /// <seealso cref="StockManager.DAL.Repositories.IStockRepository" />
     public class StockRepository : BaseRepository, IStockRepository
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StockRepository"/> class.
+        /// </summary>
+        /// <param name="context">The database context.</param>
         public StockRepository(DbContext context)
             : base(context)
         {
@@ -37,7 +41,8 @@
         /// <param name="stock">The stock entity.</param>
         public void InsertStock(Stock stock)
         {
-            throw new NotImplementedException();
+            this.DbContext.Add(stock);
+            this.DbContext.SaveChanges();
         }
     }
 }

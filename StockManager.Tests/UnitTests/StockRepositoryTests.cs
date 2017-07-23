@@ -53,7 +53,7 @@
                 using (var context = new DatabaseContext(options))
                 {
                     Assert.Equal(1, context.Stocks.Count());
-                    Assert.Equal(stock, context.Stocks.SingleOrDefault());
+                    Assert.True(stock.IsDeepEqual(context.Stocks.Single()));
                 }
             }
             finally

@@ -51,6 +51,7 @@
         /// </summary>
         protected override void ConfigureContainer()
         {
+            AutomapperInstaller.Install(this.Container);
             DalInstaller.Install(this.Container);
             base.ConfigureContainer();
         }

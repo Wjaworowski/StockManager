@@ -10,15 +10,28 @@
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class DatabaseContext : DbContext
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseContext"/> class.
+        /// </summary>
         public DatabaseContext()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseContext"/> class. Used for testing.
+        /// </summary>
+        /// <param name="options">The options for this context.</param>
         public DatabaseContext(DbContextOptions options)
             : base(options)
         {
         }
 
+        /// <summary>
+        /// Gets or sets the stocks DbSet.
+        /// </summary>
+        /// <value>
+        /// The stock DbSet.
+        /// </value>
         public DbSet<Stock> Stocks { get; set; }
 
         /// <summary>

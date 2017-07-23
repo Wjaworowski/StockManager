@@ -45,13 +45,14 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="Enums\StockType.cs" />
+    <Compile Include="Models\BaseStock.cs" />
+    <Compile Include="Models\BondModel.cs" />
+    <Compile Include="Models\EquityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

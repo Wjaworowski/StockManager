@@ -1,8 +1,11 @@
 ﻿namespace StockManager.Tests.UnitTests
 {
+    using AutoMapper;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Practices.Unity;
 
+    using StockManager.Automapper;
     using StockManager.DAL;
     using StockManager.DAL.Repositories;
     using StockManager.Installers;
@@ -13,6 +16,9 @@
     /// </summary>
     public class BootstrapperTests
     {
+        /// <summary>
+        /// The bootstrapper.
+        /// </summary>
         private readonly Bootstrapper bootstrapper;
 
         /// <summary>
@@ -51,6 +57,17 @@
         {
             var stockRepository = this.bootstrapper.Container.Resolve<IStockRepository>();
             Assert.IsType(typeof(StockRepository), stockRepository);
+        }
+
+        /// <summary>
+        /// Tests if the container can resolve IMapper and if there are maps definied.
+        /// </summary>
+        [StaFact]
+        public void ContainerCanCreateAutomapperWithConfig()
+        {
+            var mapper = this.bootstrapper.Container.Resolve<IMapper>();
+            Assert.IsType(typeof(Mapper), mapper);
+            Assert.True(mapper.ConfigurationProvider.GetAllTypeMaps().Length > 0);
         }
     }
 }
