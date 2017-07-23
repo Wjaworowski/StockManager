@@ -1,8 +1,12 @@
 ﻿namespace StockManager.Tests.UnitTests
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
+
+    using DeepEqual.Syntax;
+
+    using Microsoft.Data.Sqlite;
+    using Microsoft.EntityFrameworkCore;
 
     using StockManager.Common.Enums;
     using StockManager.DAL;
@@ -22,29 +26,39 @@
         [Fact]
         public void InsertTest()
         {
-            using (var context = new DatabaseContext())
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            try
             {
-                context.Database.EnsureCreated();
+                var options = new DbContextOptionsBuilder<DatabaseContext>().UseSqlite(connection).Options;
+                using (var context = new DatabaseContext(options))
+                {
+                    context.Database.EnsureCreated();
+                }
+
+                var stock = new Stock
+                                {
+                                    Price = new decimal(12.32),
+                                    Quantity = 7,
+                                    StockType = StockType.Bond,
+                                    CommisionPercent = 2.0
+                                };
+
+                using (var context = new DatabaseContext(options))
+                {
+                    var repository = new StockRepository(context);
+                    repository.InsertStock(stock);
+                }
+
+                using (var context = new DatabaseContext(options))
+                {
+                    Assert.Equal(1, context.Stocks.Count());
+                    Assert.Equal(stock, context.Stocks.SingleOrDefault());
+                }
             }
-
-            var stock = new Stock
+            finally
             {
-                Price = new decimal(12.32),
-                Quantity = 7,
-                StockType = StockType.Bond,
-                CommisionPercent = 2.0
-            };
-
-            using (var context = new DatabaseContext())
-            {
-                var repository = new StockRepository(context);
-                repository.InsertStock(stock);
-            }
-
-            using (var context = new DatabaseContext())
-            {
-                Assert.Equal(1, context.Stocks.Count());
-                Assert.Equal(stock, context.Stocks.SingleOrDefault());
+                connection.Close();
             }
         }
 
@@ -54,12 +68,17 @@
         [Fact]
         public void GetAllTests()
         {
-            using (var context = new DatabaseContext())
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            try
             {
-                context.Database.EnsureCreated();
-            }
+                var options = new DbContextOptionsBuilder<DatabaseContext>().UseSqlite(connection).Options;
+                using (var context = new DatabaseContext(options))
+                {
+                    context.Database.EnsureCreated();
+                }
 
-            var stockCollection = new List<Stock>
+                var stockCollection = new List<Stock>
                                       {
                                           new Stock
                                               {
@@ -76,22 +95,27 @@
                                                   CommisionPercent = 0.5
                                               }
                                       };
-            using (var context = new DatabaseContext())
-            {
-                foreach (var stock in stockCollection)
+                using (var context = new DatabaseContext(options))
                 {
-                    context.Stocks.Add(stock);
+                    foreach (var stock in stockCollection)
+                    {
+                        context.Stocks.Add(stock);
+                    }
+
+                    context.SaveChanges();
                 }
 
-                context.SaveChanges();
+                using (var context = new DatabaseContext(options))
+                {
+                    var repository = new StockRepository(context);
+                    var stocks = repository.GetAllStocks().ToList();
+                    Assert.Equal(2, stocks.Count);
+                    Assert.True(stocks.IsDeepEqual(stockCollection));
+                }
             }
-
-            using (var context = new DatabaseContext())
+            finally
             {
-                var repository = new StockRepository(context);
-                var stocks = repository.GetAllStocks();
-                Assert.Equal(2, stocks.Count);
-                Assert.Equal(stocks, stockCollection);
+                connection.Close();
             }
         }
     }

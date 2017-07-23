@@ -17,7 +17,7 @@
         /// <param name="container">The IoC container.</param>
         public static void Install(IUnityContainer container)
         {
-            container.RegisterType<DbContext, DatabaseContext>(new ContainerControlledLifetimeManager());
+            container.RegisterType<DbContext, DatabaseContext>(new ContainerControlledLifetimeManager(), new InjectionConstructor());
             container.RegisterType<IStockRepository, StockRepository>();
         }
     }

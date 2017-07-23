@@ -10,6 +10,15 @@
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class DatabaseContext : DbContext
     {
+        public DatabaseContext()
+        {
+        }
+
+        public DatabaseContext(DbContextOptions options)
+            : base(options)
+        {
+        }
+
         public DbSet<Stock> Stocks { get; set; }
 
         /// <summary>
@@ -27,7 +36,10 @@
         /// typically define extension methods on this object that allow you to configure the context.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=:memory:");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=:memory:");
+            }
         }
     }
 }

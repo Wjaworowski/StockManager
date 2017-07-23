@@ -40,7 +40,7 @@
         public void ContainerCanCreateDbContext()
         {
             var dbContext = this.bootstrapper.Container.Resolve<DbContext>();
-            Assert.Equal(dbContext.GetType(), typeof(DatabaseContext));
+            Assert.IsType(typeof(DatabaseContext), dbContext);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@
         public void ContainerCanCreateStockRepository()
         {
             var stockRepository = this.bootstrapper.Container.Resolve<IStockRepository>();
-            Assert.Equal(stockRepository.GetType(), typeof(StockRepository));
+            Assert.IsType(typeof(StockRepository), stockRepository);
         }
     }
 }

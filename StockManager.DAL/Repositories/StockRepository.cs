@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,7 @@
         /// </returns>
         public ICollection<Stock> GetAllStocks()
         {
-            throw new NotImplementedException();
+            return this.DbContext.Set<Stock>().ToList();
         }
 
         /// <summary>
